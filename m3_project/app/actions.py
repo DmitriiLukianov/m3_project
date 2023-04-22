@@ -5,13 +5,6 @@ from m3_ext.ui import all_components as ext
 from django.contrib.auth.models import User, ContentType, Group, Permission
 
 
-VALUES = [
-    [1, '1'],
-    [2, '2'],
-    [3, '3'],
-]
-
-
 class UserAddWindow(BaseEditWindow):
 
     def _init_components(self):
@@ -124,7 +117,7 @@ class PermissionAddWindow(BaseEditWindow):
             allow_blank=False,
             anchor='100%',
             data=(
-                (x, str(x)) for x in range(1, ContentType.objects.count())
+                (str(content.id), content.name) for content in ContentType.objects.all()
             )
         )
 
@@ -133,7 +126,6 @@ class PermissionAddWindow(BaseEditWindow):
             name='codename',
             allow_blank=False,
             anchor='100%')
-
 
     def _do_layout(self):
         """
@@ -190,7 +182,5 @@ class PermissionPack(ObjectPack):
     model = Permission
 
     add_window = edit_window = PermissionAddWindow
-
-    # edit_window = ModelEditWindow.fabricate(model)
 
     add_to_menu = True
