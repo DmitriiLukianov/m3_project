@@ -1,10 +1,9 @@
-from setuptools import setup
-
-import os
+from setuptools import setup, find_packages
 
 
 if __name__ == '__main__':
     setup(
         name='m3_project',
-        version=os.getenv('PACKAGE_VERSION', '1.0.0')
+        version='1.0.0',
+        packages=find_packages()
     )
