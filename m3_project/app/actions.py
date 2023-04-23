@@ -1,5 +1,5 @@
 from objectpack.actions import ObjectPack
-from objectpack.ui import ModelEditWindow, BaseEditWindow, make_combo_box
+from objectpack.ui import ModelEditWindow, BaseEditWindow
 from m3_ext.ui import all_components as ext
 
 from django.contrib.auth.models import User, ContentType, Group, Permission
@@ -111,14 +111,18 @@ class PermissionAddWindow(BaseEditWindow):
             allow_blank=False,
             anchor='100%')
 
-        self.field__content_type = make_combo_box(
-            label=u'content type',
+        self.field__content_type = ext.ExtDictSelectField(
             name='content_type_id',
-            allow_blank=False,
+            label='content type',
             anchor='100%',
-            data=(
-                (str(content.id), content.name) for content in ContentType.objects.all()
-            )
+            hide_edit_trigger=True,
+            hide_trigger=True,
+            hide_clear_trigger=True,
+            value_field='id',
+            display_field='display',
+            allow_blank=False,
+            editable=False,
+            pack=ContentTypePack,
         )
 
         self.field__codename = ext.ExtStringField(
@@ -128,9 +132,6 @@ class PermissionAddWindow(BaseEditWindow):
             anchor='100%')
 
     def _do_layout(self):
-        """
-        Здесь размещаем компоненты в окне
-        """
         super(PermissionAddWindow, self)._do_layout()
         self.form.items.extend((
             self.field__name,
@@ -139,11 +140,6 @@ class PermissionAddWindow(BaseEditWindow):
         ))
 
     def set_params(self, params):
-        """
-        Установка параметров окна
-
-        :params: Словарь с параметрами, передается из пака
-        """
         super(PermissionAddWindow, self).set_params(params)
         self.height = 'auto'
 
